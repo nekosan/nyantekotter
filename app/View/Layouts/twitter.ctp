@@ -11,7 +11,7 @@
     <div id="container">
         <div id="header">
             <div id="header_logo">
-                <?php echo $this -> Html -> link($this -> Html -> image('top_logo.png', array('width' => '296', 'height' => '66')), array('controller' => 'User', 'action' => 'index'), array('escape' => false)); ?>
+                <?php echo $this -> Html -> link($this -> Html -> image('top_logo.png', array('width' => '296', 'height' => '66')), array('controller' => 'Users', 'action' => 'index'), array('escape' => false)); ?>
             </div>
             <div id="header_menu">
                 <?php if(isset($user)): ?>

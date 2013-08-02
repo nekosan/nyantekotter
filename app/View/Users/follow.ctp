@@ -1,11 +1,11 @@
 
 <div class="main_content">
-<h3><?php print(h($user[0]['User']['name']));?>さんは<?php print($follower_num); ?>人にフォローされています。</h3>
+<h3><?php print(h($user[0]['User']['name']));?>さんは<?php print($follow_num); ?>人をフォローしています。</h3>
 
-<?php foreach($follower as $t): ?>
+<?php foreach($follow as $t): ?>
     <div class="user">
         <div class="user_header">
-            <a href="<?php echo Router::url('/users/profile/', false); echo $t['User']['username']?>">@<?php print(h($t['User']['username'])); ?></a>
+            <a href="<?php echo Router::url('/users/prifile/', false); echo $t['User']['username']?>">@<?php print(h($t['User']['username'])); ?></a>
             <b><?php print(h($t['User']['name'])); ?></b>
             <?php
             $flag = 0;
@@ -16,11 +16,11 @@
             }
             if(!$flag):
             ?>
-            <a href="<?php echo Router::url('/users/act_follow/', false);?>follower/<?php echo $user[0]['User']['username'] ?>/<?php echo $t['User']['id'] ?>">フォロー</a>
+            <a href="<?php echo Router::url('/users/act_follow/', false); ?>index/<?php echo $t['User']['id'] ?>">フォロー</a>
             <?php
             else :
             ?>
-            <a href="<?php echo Router::url('/users/act_remove/', false); ?>follower/<?php echo $user[0]['User']['username'] ?>/<?php echo $t['User']['id'] ?>">リムーブ</a>
+            <a href="<?php echo Router::url('/users/act_remove/', false); ?>index/<?php echo $t['User']['id'] ?>">リムーブ</a>
             <?php
             endif;
             ?>

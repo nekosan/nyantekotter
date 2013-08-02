@@ -2,7 +2,7 @@
 App::uses('AppModel', 'Model');
 
 class UserUser extends AppModel {
-        
+    
     public $belongsTo = array(
         'User' => array(
             'className' => 'User',
@@ -36,6 +36,36 @@ class UserUser extends AppModel {
         endforeach;
         
         return $follow_id;
+    }
+
+    public function followUser($login_id, $follow_id)
+    {
+        $options = $this -> find('all', array('conditions' => array('UserUser.user_id' => $login_id, 'UserUser.follow_id' => $follow_id)));
+        if(!empty($options)){
+            return 1;
+        }
+        $datas = array(
+            'UserUser' => array(
+                'user_id' => $login_id,
+                'follow_id' => $follow_id
+            )
+        );
+        if($this -> save($datas)){
+            return 0;
+        }
+        else{
+            return 1;
+        }
+    }
+
+    public function removeUser($login_id, $remove_id)
+    {
+        if($this -> deleteAll(array('UserUser.user_id' => $login_id, 'UserUser.follow_id' => $remove_id), false)){
+            return 0;
+        }
+        else {
+            return 1;
+        }
     }
 
     public function test(){

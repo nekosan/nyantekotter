@@ -1,23 +1,10 @@
-<pre>
-<?php
-    //print_r(h($tweets));
-?>
-</pre>
-<?php
-    print(
-        $this -> Form -> create('Post') .
-        $this -> Form -> input('content') .
-        $this -> Form -> end('Post')
-    );
-    ?>
-<br />
 
 <div class="main_content">
 
 <?php foreach($tweets as $t): ?>
     <div class="tweet">
         <div class="tweet_header">
-            <a href="">@<?php print(h($t['UserPost']['username'])); ?></a>
+            <a href="<?php echo Router::url('/users/profile/', false); echo $t['UserPost']['username']?>">@<?php print(h($t['UserPost']['username'])); ?></a>
             <b><?php print(h($t['UserPost']['name'])); ?></b>
         </div>
         <div class="tweet_content">
@@ -39,7 +26,7 @@
 <div class="side_content">
     <table class="user_info">
         <tr>
-            <td class="name">名前 : <a href=""><?php print(h($user[0]['User']['name'])); ?></a></td>
+            <td class="name">名前 : <a href="<?php echo Router::url('/users/profile/', false); echo $user[0]['User']['username']?>"><?php print(h($user[0]['User']['name'])); ?></a></td>
         </tr>
     </table>
     <table class="user_info">
@@ -48,8 +35,17 @@
             <td class="number"><?php print(h($follower_num)); ?></td>
         </tr>
         <tr>
-            <td class="text"><a href="">フォローしている</a></td>
-            <td class="text"><a href="">フォローされている</a></td>
+            <td class="text"><a href="<?php echo Router::url('/users/follow/', false); echo $user[0]['User']['username']?>">フォローしている</a></td>
+            <td class="text"><a href="<?php echo Router::url('/users/follower/', false); echo $user[0]['User']['username']?>">フォローされている</a></td>
         </tr>
     </table>
+    <div class="post">
+    <?php
+        print(
+            $this -> Form -> create('Post') .
+            $this -> Form -> textarea('content', array('cols' => '29', 'rows' => '4', 'label' => '')) .
+            $this -> Form -> end('Post')
+        );
+    ?>
+    </div>
 </div>
