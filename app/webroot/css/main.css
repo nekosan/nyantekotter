@@ -1,0 +1,140 @@
+
+html {
+    margin: 0;
+}
+
+body {
+    background-color: #77ccff;
+    margin: 0;
+}
+
+div {
+    color: #3060A0;
+}
+
+a{
+    color: #3070D0;
+    text-decoration: none;
+}
+a:hover {
+    color: #6090F0;
+}
+
+div#container {
+    margin: 0;
+}
+
+div#header {
+    width: 100%;
+    height: 66px;
+    margin: 0;
+    background-color: #444444;
+}
+
+div#header_logo{
+    width: 296px;
+    height: 66px;
+    float:left;
+    background-color: #444444;
+}
+
+div#header_menu {
+    height:66px;
+    float: right;
+    background-color: #444444;
+}
+
+div#header_menu span{
+    font-size: 15px;
+    font-weight: bold;
+}
+
+div.tweet {
+    width: 400px;
+    margin-bottom: 3px;
+    padding: 10px;
+    background-color: #eeeeff;
+    /*border: solid 1px #9999ff;*/
+}
+
+div.tweet_header {
+    padding-bottom: 2px;
+    border-bottom: solid 1px #bbbbcc;
+}
+
+div.tweet_content {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-bottom: solid 1px #bbbbcc;
+}
+
+div.tweet_time {
+    margin-top: 10px;
+    font-size: 10px;
+}
+
+div.user {
+    width: 400px;
+    margin-bottom: 1px;
+    padding: 10px;
+    background-color: #eeeeff;
+    border: solid 1px #9999ff;
+}
+
+div.user_header {
+    margin-bottom: 5px;
+    padding-bottom: 2px;
+    border-bottom: solid 1px #bbbbcc;
+}
+
+div#content {
+    width: 710px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 20px;
+}
+
+div.main_content {
+    width:420px;
+    margin: 0 auto;
+    padding: 10px;
+    float: right;
+    background-color: #ffffff;
+}
+
+div.side_content {
+    width: 230px;
+    height: 100%;
+    margin: 0 auto;
+    padding: 10px;
+    float: left;
+    background-color: #ffffff;
+}
+
+table.user_info {
+    border-collapse: collapse;
+    margin-bottom: 10px;
+}
+
+table.user_info td.number {
+    padding: 5px;
+    font-weight: bold;
+    border-right: solid 1px #7788bb;
+}
+
+table.user_info td.name {
+    width: 230px;
+    border-bottom: solid 1px #7788bb;
+}
+
+table.user_info td.name a {
+    font-weight: bold;
+    font-size: 30px;
+}
+
+table.user_info td.text {
+    padding: 2px;
+    font-size: 8px;
+    border-right: solid 1px #7788bb;
+}
+
