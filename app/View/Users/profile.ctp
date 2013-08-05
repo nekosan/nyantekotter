@@ -41,7 +41,7 @@
     </table>
     <?php
     $flag = 0;
-    foreach($follow_id as $id){
+    foreach($auth_follow_id as $id){
         if($id == $user[0]['User']['id']){
             $flag = 1;
         }
@@ -50,13 +50,14 @@
     <?php
     if(!$flag):
     ?>
-    <a href="<?php echo Router::url('/users/act_follow/', false); ?>profile/<?php echo $user[0]['User']['username'] ?>/<?php echo $t['User']['id'] ?>">フォロー</a>
+    <a href="<?php echo Router::url('/users/act_follow/', false); ?>profile/<?php echo $user[0]['User']['username'] ?>/<?php echo $user[0]['User']['id'] ?>">フォロー</a>
     <?php
     else :
     ?>
-    <a href="<?php echo Router::url('/users/act_remove/', false); ?>index/<?php echo $user[0]['User']['id'] ?>">リムーブ</a>
+    <a href="<?php echo Router::url('/users/act_remove/', false); ?>profile/<?php echo $user[0]['User']['username'] ?>/<?php echo $user[0]['User']['id'] ?>">リムーブ</a>
     <?php
     endif;
     ?>
+    
 </div>
 

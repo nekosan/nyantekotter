@@ -28,9 +28,11 @@ class UsersController extends AppController {
         $this -> loadModel('Post');
         $this -> loadModel('UserUser');
         $user = $this -> User -> getUser($this -> Auth -> user()['username']);
+        $auth = $this -> User -> getUser($this -> Auth -> user()['username']);
 
         $follow_num = count($this -> UserUser -> getFollowId($user[0]['User']['id']));
         $follower_num = count($this -> UserUser -> getFollowerId($user[0]['User']['id']));
+        $auth_follow_id = $this -> UserUser -> getFollowId($auth[0]['User']['id']);
 
         if($this -> request -> is('post')){
             if($this -> Post -> postTweet($this -> request, $this -> Auth -> user()['id'])){
@@ -53,6 +55,8 @@ class UsersController extends AppController {
         $this -> set('user', $user);
         $this -> set('follow_num', $follow_num);
         $this -> set('follower_num', $follower_num);
+        $this -> set('auth', $auth);
+        $this -> set('auth_follow_id', $auth_follow_id);
     }
 
     //Profile
@@ -60,6 +64,8 @@ class UsersController extends AppController {
         $this -> loadModel('Post');
         $this -> loadModel('UserUser');
         $user = $this -> User -> getUser($username);
+        $auth_user = $this -> User -> getUser($this -> Auth -> user()['username']);
+        $auth_follow_id = $this -> UserUser -> getFollowId($auth_user[0]['User']['id']);
         $follow_num = count($this -> UserUser -> getFollowId($user[0]['User']['id']));
         $follower_num = count($this -> UserUser -> getFollowerId($user[0]['User']['id']));
         $follow_id = $this -> UserUser -> getFollowId($user[0]['User']['id']);
@@ -71,14 +77,17 @@ class UsersController extends AppController {
         $this -> set('follower_num', $follower_num);
         $this -> set('tweets',$tweet);
         $this -> set('follow_id', $follow_id);
-        $thiw -> set('auth', $this -> Auth -> user());
+        $this -> set('auth_user', $auth_user);
+        $this -> set('auth_follow_id', $auth_follow_id);
     }
 
     public function follow($username){
         $this -> loadModel('UserUser');
         $this -> loadModel('Post');
         $user = $this -> User -> getUser($username);
+        $auth_user = $this -> User -> getUser($this -> Auth -> user()['username']);
         $follow_id = $this -> UserUser -> getFollowId($user[0]['User']['id']);
+        $auth_follow_id = $this -> UserUser -> getFollowId($auth_user[0]['User']['id']);
 
         $this -> paginate = array(
             'conditions' => array('User.id' => $follow_id),
@@ -100,7 +109,8 @@ class UsersController extends AppController {
         $this -> set('follow', $follow);
         $this -> set('later_tweet', $later_tweet);
         $this -> set('follow_id', $follow_id);
-        $thiw -> set('auth', $this -> Auth -> user());
+        $this -> set('auth_user', $auth_user);
+        $this -> set('auth_follow_id', $auth_follow_id);
     }
 
     public function follower($username)
@@ -108,8 +118,12 @@ class UsersController extends AppController {
         $this -> loadModel('UserUser');
         $this -> loadModel('Post');
         $user = $this -> User -> getUser($username);
+        $auth_user = $this -> User -> getUser($this -> Auth -> user()['username']);
+
         $follow_id = $this -> UserUser -> getFollowId($user[0]['User']['id']);
         $follower_id = $this -> UserUser -> getFollowerId($user[0]['User']['id']);
+
+        $auth_follow_id = $this -> UserUser -> getFollowId($auth_user[0]['User']['id']);
 
         $this -> paginate = array(
             'conditions' => array('User.id' => $follower_id),
@@ -131,7 +145,8 @@ class UsersController extends AppController {
         $this -> set('follower', $follower);
         $this -> set('later_tweet', $later_tweet);
         $this -> set('follow_id', $follow_id);
-        $thiw -> set('auth', $this -> Auth -> user());
+        $this -> set('auth_user', $auth_user);
+        $this -> set('auth_follow_id', $auth_follow_id);
     }
 
     //Register

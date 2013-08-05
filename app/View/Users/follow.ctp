@@ -9,18 +9,19 @@
             <b><?php print(h($t['User']['name'])); ?></b>
             <?php
             $flag = 0;
-            foreach($follow_id as $id){
+            foreach($auth_follow_id as $id){
                 if($id == $t['User']['id']){
                     $flag = 1;
+                    break;
                 }
             }
             if(!$flag):
             ?>
-            <a href="<?php echo Router::url('/users/act_follow/', false); ?>index/<?php echo $t['User']['id'] ?>">フォロー</a>
+            <a href="<?php echo Router::url('/users/act_follow/', false); ?>follow/<?php echo $user[0]['User']['username'] ?>/<?php echo $t['User']['id'] ?>">フォロー</a>
             <?php
             else :
             ?>
-            <a href="<?php echo Router::url('/users/act_remove/', false); ?>index/<?php echo $t['User']['id'] ?>">リムーブ</a>
+            <a href="<?php echo Router::url('/users/act_remove/', false); ?>follow/<?php echo $user[0]['User']['username'] ?>/<?php echo $t['User']['id'] ?>">リムーブ</a>
             <?php
             endif;
             ?>

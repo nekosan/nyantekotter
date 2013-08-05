@@ -9,7 +9,7 @@
             <b><?php print(h($t['User']['name'])); ?></b>
             <?php
             $flag = 0;
-            foreach($follow_id as $id){
+            foreach($auth_follow_id as $id){
                 if($id == $t['User']['id']){
                     $flag = 1;
                 }
