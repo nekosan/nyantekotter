@@ -149,6 +149,17 @@ class UsersController extends AppController {
         $this -> set('auth_follow_id', $auth_follow_id);
     }
 
+    //User Search
+    public function user_search($search_key)
+    {
+        $this -> paginate = array(
+            'conditions' => array('User.username' => $search_key),
+            'limit' => 10
+        );
+        $result = $this -> paginate('User');
+
+    }
+
     //Register
     public function register()
     {
