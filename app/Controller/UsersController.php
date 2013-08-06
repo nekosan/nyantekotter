@@ -162,6 +162,37 @@ class UsersController extends AppController {
         }
     }
 
+    //User Search
+    public function user_search()
+    {
+        $this -> loadModel('Post');
+        $this -> loadModel('UserUser');
+        $auth_user = $this -> User -> getUser($this -> Auth -> user()['username']);
+        $auth_follow_id = $this -> UserUser -> getFollowId($auth_user[0]['User']['id']);
+        
+        $search_key = '';
+        if($this -> request -> is('post')){
+            $search_key = $this -> request['data']['User']['key'];
+        }
+        
+        if($search_key != ''){
+            $this -> paginate = array(
+                'conditions' => array('User.username LIKE' => '%'.$search_key.'%'),
+                'limit' => 10
+            );
+            $result = $this -> paginate('User');
+            $this -> set('result', $result);
+        }
+
+        $later_tweet = array();
+        foreach ($auth_follow_id as $id){
+            $later_tweet[$id] = $this -> Post -> getLaterTweet($id);
+        }
+        
+        $this -> set('auth_user', $auth_user);
+        $this -> set('auth_follow_id', $auth_follow_id);
+        $this -> set('later_tweet', $later_tweet);    }
+
     //Register Completed
     public function register_completed()
     {
