@@ -64,6 +64,9 @@ class UsersController extends AppController {
         $this -> loadModel('Post');
         $this -> loadModel('UserUser');
         $user = $this -> User -> getUser($username);
+        if(empty($user)){
+            $this -> redirect(array('action' => 'undefined'));
+        }
         $auth_user = $this -> User -> getUser($this -> Auth -> user('username'));
         $auth_follow_id = $this -> UserUser -> getFollowId($auth_user[0]['User']['id']);
         $follow_num = count($this -> UserUser -> getFollowId($user[0]['User']['id']));
@@ -85,6 +88,9 @@ class UsersController extends AppController {
         $this -> loadModel('UserUser');
         $this -> loadModel('Post');
         $user = $this -> User -> getUser($username);
+        if(empty($user)){
+            $this -> redirect(array('action' => 'undefined'));
+        }
         $auth_user = $this -> User -> getUser($this -> Auth -> user('username'));
         $follow_id = $this -> UserUser -> getFollowId($user[0]['User']['id']);
         $auth_follow_id = $this -> UserUser -> getFollowId($auth_user[0]['User']['id']);
@@ -118,6 +124,9 @@ class UsersController extends AppController {
         $this -> loadModel('UserUser');
         $this -> loadModel('Post');
         $user = $this -> User -> getUser($username);
+        if(empty($user)){
+            $this -> redirect(array('action' => 'undefined'));
+        }
         $auth_user = $this -> User -> getUser($this -> Auth -> user('username'));
 
         $follow_id = $this -> UserUser -> getFollowId($user[0]['User']['id']);
@@ -238,5 +247,10 @@ class UsersController extends AppController {
             $this -> Session -> setFlash('フォローに失敗しました。');
         }
         $this -> redirect(array('action' => $redirect, $param));
+    }
+
+    public function undefined()
+    {
+        
     }
 }
