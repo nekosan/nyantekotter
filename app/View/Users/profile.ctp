@@ -75,7 +75,7 @@
         <?php echo $this -> Html -> link((h('フォロー')), array(
             'controller' => 'Users',
             'action' => 'act_follow',
-            'follow',
+            'profile',
             $user[0]['User']['username'],
             $user[0]['User']['id']
         )); ?>
@@ -85,7 +85,7 @@
         <?php echo $this -> Html -> link((h('フォロー解除')), array(
             'controller' => 'Users',
             'action' => 'act_remove',
-            'follow',
+            'profile',
             $user[0]['User']['username'],
             $user[0]['User']['id']
         )); ?>
