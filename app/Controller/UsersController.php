@@ -2,6 +2,7 @@
 App::uses('AppController', 'Controller');
 
 class UsersController extends AppController {
+    var $helpers = array('Js');
     public $components = array('Session', 'Auth');
     public $paginate = array(
         'limit' => 10,
@@ -50,6 +51,7 @@ class UsersController extends AppController {
                 'Post.time' => 'desc'
             )
         );
+
         $tweet = $this -> paginate('Post');
         $this -> set('tweets', $tweet);
         $this -> set('user', $user);
