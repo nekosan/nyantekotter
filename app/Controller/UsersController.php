@@ -12,8 +12,6 @@ class UsersController extends AppController {
     public function beforeFilter()
     {
         parent::beforeFilter();
-
-        $this -> Auth -> deny('index', 'logout');
     }
 
     //TL
@@ -63,6 +61,9 @@ class UsersController extends AppController {
 
     //Profile
     public function profile($username){
+        if(empty($username)){
+            $this -> redirect(array('action' => 'undefined'));
+        }
         $this -> loadModel('Post');
         $this -> loadModel('UserUser');
         $user = $this -> User -> getUser($username);
@@ -87,6 +88,9 @@ class UsersController extends AppController {
     }
 
     public function follow($username){
+        if(empty($username)){
+            $this -> redirect(array('action' => 'undefined'));
+        }
         $this -> loadModel('UserUser');
         $this -> loadModel('Post');
         $user = $this -> User -> getUser($username);
@@ -123,6 +127,9 @@ class UsersController extends AppController {
 
     public function follower($username)
     {
+        if(empty($username)){
+            $this -> redirect(array('action' => 'undefined'));
+        }
         $this -> loadModel('UserUser');
         $this -> loadModel('Post');
         $user = $this -> User -> getUser($username);

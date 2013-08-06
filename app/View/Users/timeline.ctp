@@ -1,7 +1,6 @@
 <?php echo $this -> Html -> script( 'jquery-1.10.2.min', array( 'inline' => false ) ); ?>
 <?php echo $this -> Html -> script( 'test', array( 'inline' => false ) ); ?>
 
-
 <div class="main_content">
 
 <?php foreach($tweets as $t): ?>
@@ -40,14 +39,14 @@
         <tr>
             <td class="text"><a href="<?php echo Router::url('/users/follow/', false); echo $user[0]['User']['username']?>">フォローしている</a></td>
             <td class="text"><a href="<?php echo Router::url('/users/follower/', false); echo $user[0]['User']['username']?>">フォローされている</a></td>
-            <td><span id="textnum">140</span></td>
+            <td><span class="textnum">140</span></td>
         </tr>
     </table>
     <div class="post">
     <?php
         print(
             $this -> Form -> create('Post') .
-            $this -> Form -> textarea('content', array('id' => 'posttext', 'cols' => '29', 'rows' => '4', 'label' => '', 'value' => '')) .
+            $this -> Form -> textarea('content', array('class' => 'posttext', 'cols' => '29', 'rows' => '4', 'label' => '', 'value' => '')) .
             $this -> Form -> end('Post')
         );
     ?>

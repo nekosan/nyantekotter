@@ -35,7 +35,7 @@ class AppController extends Controller {
     public $components = array('Auth');
 
     public function beforeFilter(){
-        $this -> Auth -> allow();
+        $this -> Auth -> allow('login', 'register', 'register_completed');
         $this -> set('user', $this -> Auth -> user());
         $this -> layout = 'twitter';
     }
