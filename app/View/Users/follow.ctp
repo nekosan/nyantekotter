@@ -5,7 +5,11 @@
 <?php foreach($follow as $t): ?>
     <div class="user">
         <div class="user_header">
-            <a href="<?php echo Router::url('/users/prifile/', false); echo $t['User']['username']?>">@<?php print(h($t['User']['username'])); ?></a>
+            <?php echo $this -> Html -> link(h('@'.$t['User']['username']), array(
+               'controller' => 'Users',
+               'action' => 'profile',
+               $t['User']['username']
+            )); ?>
             <b><?php print(h($t['User']['name'])); ?></b>
             <?php
             $flag = 0;
@@ -17,11 +21,23 @@
             }
             if(!$flag):
             ?>
-            <a href="<?php echo Router::url('/users/act_follow/', false); ?>follow/<?php echo $user[0]['User']['username'] ?>/<?php echo $t['User']['id'] ?>">フォロー</a>
+            <?php echo $this -> Html -> link((h('フォロー')), array(
+                'controller' => 'Users',
+                'action' => 'act_follow',
+                'follow',
+                $user[0]['User']['username'],
+                $t['User']['id']
+            )); ?>
             <?php
             else :
             ?>
-            <a href="<?php echo Router::url('/users/act_remove/', false); ?>follow/<?php echo $user[0]['User']['username'] ?>/<?php echo $t['User']['id'] ?>">リムーブ</a>
+            <?php echo $this -> Html -> link((h('フォロー解除')), array(
+                'controller' => 'Users',
+                'action' => 'act_remove',
+                'follow',
+                $user[0]['User']['username'],
+                $t['User']['id']
+            )); ?>
             <?php
             endif;
             ?>
@@ -48,7 +64,13 @@
 <div class="side_content">
     <table class="user_info">
         <tr>
-            <td class="name">名前 : <a href="<?php echo Router::url('/users/profile/', false); echo $user[0]['User']['username']?>"><?php print(h($user[0]['User']['name'])); ?></a></td>
+            <td class="name">名前 : 
+                <?php echo $this -> Html -> link((h($user[0]['User']['name'])), array(
+                    'controller' => 'Users',
+                    'action' => 'profile',
+                    $user[0]['User']['username'],
+                )); ?>
+            </td>
         </tr>
     </table>
     <table class="user_info">
@@ -57,8 +79,20 @@
             <td class="number"><?php print(h($follower_num)); ?></td>
         </tr>
         <tr>
-            <td class="text"><a href="<?php echo Router::url('/users/follow/', false); echo $user[0]['User']['username']?>">フォローしている</a></td>
-            <td class="text"><a href="<?php echo Router::url('/users/follower/', false); echo $user[0]['User']['username']?>">フォローされている</a></td>
+            <td class="text">
+                <?php echo $this -> Html -> link((h('フォローしている')), array(
+                    'controller' => 'Users',
+                    'action' => 'follow',
+                    $user[0]['User']['username'],
+                )); ?>
+            </td>
+            <td class="text">
+                <?php echo $this -> Html -> link((h('フォローされている')), array(
+                    'controller' => 'Users',
+                    'action' => 'follower',
+                    $user[0]['User']['username']
+                ));?>
+            </td>
         </tr>
     </table>
 </div>
