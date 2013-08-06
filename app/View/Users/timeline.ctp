@@ -1,3 +1,8 @@
+<script type="text/javascript"><!--
+function ShowLength( idn, str ) {
+   document.getElementById(idn).innerHTML = (140 - str.length);
+}
+// --></script>
 
 <div class="main_content">
 
@@ -37,13 +42,14 @@
         <tr>
             <td class="text"><a href="<?php echo Router::url('/users/follow/', false); echo $user[0]['User']['username']?>">フォローしている</a></td>
             <td class="text"><a href="<?php echo Router::url('/users/follower/', false); echo $user[0]['User']['username']?>">フォローされている</a></td>
+            <td><span id="inputlength1">140</span></td>
         </tr>
     </table>
     <div class="post">
     <?php
         print(
             $this -> Form -> create('Post') .
-            $this -> Form -> textarea('content', array('cols' => '29', 'rows' => '4', 'label' => '')) .
+            $this -> Form -> textarea('content', array('cols' => '29', 'rows' => '4', 'label' => '', 'onkeyup' => "ShowLength('inputlength1', value);")) .
             $this -> Form -> end('Post')
         );
     ?>
