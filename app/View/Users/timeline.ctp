@@ -47,7 +47,7 @@
     <?php
         print(
             $this -> Form -> create('Post') .
-            $this -> Form -> textarea('posttext', array('id' => 'posttext', 'cols' => '29', 'rows' => '4', 'label' => '')) .
+            $this -> Form -> textarea('content', array('id' => 'posttext', 'cols' => '29', 'rows' => '4', 'label' => '', 'value' => '')) .
             $this -> Form -> end('Post')
         );
     ?>
