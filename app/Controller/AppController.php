@@ -38,5 +38,6 @@ class AppController extends Controller {
         $this -> Auth -> allow('login', 'register', 'register_completed');
         $this -> set('user', $this -> Auth -> user());
         $this -> layout = 'twitter';
+
     }
 }

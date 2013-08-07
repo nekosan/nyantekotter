@@ -4,14 +4,12 @@ App::uses('AppController', 'Controller');
 class UsersController extends AppController {
     var $helpers = array('Js');
     public $components = array('Session', 'Auth');
-    public $paginate = array(
-        'limit' => 10,
-        'order' => array('time' => 'desc')
-    );
-
+    
     public function beforeFilter()
     {
         parent::beforeFilter();
+        $this -> loadModel('Post');
+        $this -> loadModel('UserUser');
     }
 
     //TL
@@ -24,14 +22,12 @@ class UsersController extends AppController {
 
     //Time Line
     public function timeline(){
-        $this -> loadModel('Post');
-        $this -> loadModel('UserUser');
         $user = $this -> User -> getUser($this -> Auth -> user('username'));
-        $auth = $this -> User -> getUser($this -> Auth -> user('username'));
+        $auth_user = $this -> User -> getUser($this -> Auth -> user('username'));
 
         $follow_num = count($this -> UserUser -> getFollowId($user[0]['User']['id']));
         $follower_num = count($this -> UserUser -> getFollowerId($user[0]['User']['id']));
-        $auth_follow_id = $this -> UserUser -> getFollowId($auth[0]['User']['id']);
+        $auth_follow_id = $this -> UserUser -> getFollowId($auth_user[0]['User']['id']);
 
         if($this -> request -> is('post')){
             if($this -> Post -> postTweet($this -> request, $this -> Auth -> user('id'))){
@@ -41,21 +37,19 @@ class UsersController extends AppController {
 
         $follow = $this -> UserUser -> getFollowId($this -> Auth -> user('id'));
         array_push($follow, $this -> Auth -> user('id'));
+
         $this -> paginate = array(
             'conditions' => array(
-                'Post.user_id' => $follow
+                'Post.user_id' => $follow,
+                'Post.f_delete' => 0
             ),
-            'order' => array(
-                'Post.time' => 'desc'
-            )
+            'limit' => 10
         );
-
-        $tweet = $this -> paginate('Post');
-        $this -> set('tweets', $tweet);
+        $this -> set('tweets', $this -> paginate('Post'));
         $this -> set('user', $user);
         $this -> set('follow_num', $follow_num);
         $this -> set('follower_num', $follower_num);
-        $this -> set('auth', $auth);
+        $this -> set('auth_user', $auth_user);
         $this -> set('auth_follow_id', $auth_follow_id);
     }
 
@@ -64,8 +58,6 @@ class UsersController extends AppController {
         if(empty($username)){
             $this -> redirect(array('action' => 'undefined'));
         }
-        $this -> loadModel('Post');
-        $this -> loadModel('UserUser');
         $user = $this -> User -> getUser($username);
         if(empty($user)){
             $this -> redirect(array('action' => 'undefined'));
@@ -91,8 +83,6 @@ class UsersController extends AppController {
         if(empty($username)){
             $this -> redirect(array('action' => 'undefined'));
         }
-        $this -> loadModel('UserUser');
-        $this -> loadModel('Post');
         $user = $this -> User -> getUser($username);
         if(empty($user)){
             $this -> redirect(array('action' => 'undefined'));
@@ -130,8 +120,6 @@ class UsersController extends AppController {
         if(empty($username)){
             $this -> redirect(array('action' => 'undefined'));
         }
-        $this -> loadModel('UserUser');
-        $this -> loadModel('Post');
         $user = $this -> User -> getUser($username);
         if(empty($user)){
             $this -> redirect(array('action' => 'undefined'));
@@ -183,8 +171,6 @@ class UsersController extends AppController {
     //User Search
     public function user_search()
     {
-        $this -> loadModel('Post');
-        $this -> loadModel('UserUser');
         $auth_user = $this -> User -> getUser($this -> Auth -> user('username'));
         $auth_follow_id = $this -> UserUser -> getFollowId($auth_user[0]['User']['id']);
         
@@ -241,7 +227,6 @@ class UsersController extends AppController {
     //Follow Action
     public function act_follow($redirect, $param, $follow_id)
     {
-        $this -> loadModel('UserUser');
         if($this -> UserUser -> followUser($this -> Auth -> user('id'), $follow_id)){
                 $this -> Session -> setFlash('フォローに失敗しました。');
         }
@@ -251,7 +236,6 @@ class UsersController extends AppController {
     //Remove Action
     public function act_remove($redirect, $param, $remove_id)
     {
-        $this -> loadModel('UserUser');
         if($this -> UserUser -> removeUser($this -> Auth -> user('id'), $remove_id)){
             $this -> Session -> setFlash('フォローに失敗しました。');
         }
