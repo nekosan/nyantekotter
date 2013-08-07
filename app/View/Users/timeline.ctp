@@ -1,5 +1,6 @@
 <?php echo $this -> Html -> script( 'jquery-1.10.2.min', array( 'inline' => false ) ); ?>
 <?php echo $this -> Html -> script( 'test', array( 'inline' => false ) ); ?>
+<?php echo $this -> Js -> writeBuffer(array('inline' => 'true')); ?>
 
 <div class="main_content">
 
@@ -79,10 +80,14 @@
     <div class="post">
     <?php
         print(
-            $this -> Form -> create('Post', array('default' => false)) .
-            $this -> Form -> textarea('content', array('class' => 'posttext', 'cols' => '29', 'rows' => '4', 'label' => '', 'value' => '')) .
-            $this -> Form -> end('Post')
+            $this -> Form -> create('Post', array('class' => 'postform', 'default' => false)) .
+            $this -> Form -> input('content', array('class' => 'postfield', 'cols' => '29', 'rows' => '4', 'label' => '', 'value' => '')) .
+            $this -> Form -> submit('Post', array('class' => 'postbutton', 'url' => 'user/timeline')) .
+            $this -> Form -> end()
         );
     ?>
     </div>
+    <div id='messageArea'></div>
 </div>
+
+
