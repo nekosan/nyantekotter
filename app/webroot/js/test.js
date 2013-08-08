@@ -2,6 +2,7 @@
 $.getJSONP = function(url, callback, param){
     return $.ajax({
         url: url,
+        cache: false,
         dataType: "jsonp",
         success: callback,
     });
@@ -53,6 +54,7 @@ $(function(){
             type: 'POST',
             url: '/nyantekotter/users/tweetpost',
             data: d,
+            cache: false,
             success: function(data, dataType) {
                 $('.postfield').val('');
                 $(".textnum").text(140);
