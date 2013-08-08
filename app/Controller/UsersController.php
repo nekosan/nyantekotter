@@ -13,6 +13,12 @@ class UsersController extends AppController {
         $this -> loadModel('UserUser');
     }
 
+    public function _update_session_auth_user() {
+        $user = $this -> User -> find('first', array('conditions' => array('id' => $this->Auth->user('id')), 'recursive' => -1));
+        unset($user['User']['password']);
+        $this -> Session -> write('Auth', $user);
+    }
+
     //TL
     public function index($argu)
     {
@@ -269,7 +275,7 @@ class UsersController extends AppController {
     public function register()
     {
         if($this -> request ->is('post')){
-            $this -> request -> data['User']['password'] = AuthComponent::password($this->data['User']['password']);
+            $this -> request -> data['User']['password'] = AuthComponent::password($this -> request -> data['User']['password']);
             if($this -> User -> save($this -> request -> data)){
                 $this -> redirect('register_completed');
             }
@@ -323,7 +329,7 @@ class UsersController extends AppController {
                 return $this -> redirect('index');
             }
             else{
-                $this -> Session -> setFlash('$B%m%0%$%s$K<:GT$7$^$7$?(B');
+                $this -> Session -> setFlash('ログインに失敗しました。');
             }
         }
     }
@@ -335,11 +341,35 @@ class UsersController extends AppController {
         $this -> redirect('login');
     }
 
+    public function profile_conf(){
+        $this -> Session -> setFlash('');
+
+        if($this -> request ->is('post')){
+            $data = array('User' => array(
+                'id' => $this -> Auth -> user('id'),
+                'username' => $this -> request -> data['User']['username'],
+                'password' => AuthComponent::password($this -> request -> data['User']['password']),
+                'name' => $this -> request -> data['User']['name'],
+                'address' => $this -> request -> data['User']['address'],
+            ));
+            if($this -> User -> save($data, true, array('username', 'password', 'name', 'address'))){
+                $user = $this -> User -> find('first', array('conditions' => array('id' => $this->Auth->user('id')), 'recursive' => -1));
+        unset($user['User']['password']);
+        $this -> Session -> write('Auth', $user);
+                $this -> Session -> setFlash('プロフィールを更新しました');
+            }
+            else{
+                $this -> Session -> setFlash('プロフィールを更新できませんでした');
+            }
+        }
+        $this -> set('auth_user', $this -> Auth -> user());
+    }
+
     //Follow Action
     public function act_follow($redirect, $param, $follow_id)
     {
         if($this -> UserUser -> followUser($this -> Auth -> user('id'), $follow_id)){
-                $this -> Session -> setFlash('$B%U%)%m!<$K<:GT$7$^$7$?!#(B');
+                $this -> Session -> setFlash('フォローできませんでした');
         }
         $this -> redirect(array('action' => $redirect, $param));
     }
@@ -348,7 +378,7 @@ class UsersController extends AppController {
     public function act_remove($redirect, $param, $remove_id)
     {
         if($this -> UserUser -> removeUser($this -> Auth -> user('id'), $remove_id)){
-            $this -> Session -> setFlash('$B%U%)%m!<$K<:GT$7$^$7$?!#(B');
+            $this -> Session -> setFlash('フォロー解除できませんでした');
         }
         $this -> redirect(array('action' => $redirect, $param));
     }

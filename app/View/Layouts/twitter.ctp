@@ -20,7 +20,8 @@
             </div>
             <div id="header_menu">
                 <?php if(isset($user)): ?>
-                        <span><?php echo $this -> Html -> link('ユーザ検索', '/users/user_search') ?></span>
+                        <span><?php echo $this -> Html -> link('プロフィール変更', '/users/profile_conf') ?></span> |
+                        <span><?php echo $this -> Html -> link('ユーザ検索', '/users/user_search') ?></span> |
                         <span><?php echo $this -> Html -> link('ログアウト', '/users/logout'); ?></span>
                     <?php else: ?>
                         <span><?php echo $this -> Html -> link('ログイン', '/users/login'); ?></span> | 

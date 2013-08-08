@@ -26,7 +26,19 @@ class User extends AppModel {
                 'rule' => array('between', 8, 64),
                 'message' => 'パスワードは8文字以上64文字以内にしてください。'
             ),
-        )
+        ),
+        'name' => array(
+            array(
+                'rule' => array('between', 0, 32),
+                'message' => '名前は32文字以下にしてください。'
+            ),
+        ),
+        'address' => array(
+            array(
+                'rule' => 'isUnique',
+                'message' => '既に登録されているメールアドレスです。',
+            ),
+        ),
     );
 
     /*public $hasAndBelongsToMany = array(

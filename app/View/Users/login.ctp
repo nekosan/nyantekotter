@@ -1,3 +1,4 @@
+<?php echo $this -> session->flash() ?>
 
 <?php
 print(
@@ -6,3 +7,5 @@ print(
     $this -> Form -> input('password', array('label' => 'パスワード')) .
     $this -> Form -> end('ログイン')
 );
+
+
