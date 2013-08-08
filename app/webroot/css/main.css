@@ -66,6 +66,7 @@ div.tweet_content {
     padding-top: 10px;
     padding-bottom: 10px;
     border-bottom: solid 1px #bbbbcc;
+    word-wrap: break-word;
 }
 
 div.tweet_time {
