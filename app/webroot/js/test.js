@@ -37,12 +37,14 @@ $(function(){
             data: d,
             success: function(data, dataType) {
                 $('.postfield').val('');
+                $(".textnum").text(140);
                 update();
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                 alert('Error:' + errorThrown);
             }
         });
+
         return false;
     });
 

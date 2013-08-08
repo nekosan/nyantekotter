@@ -138,3 +138,20 @@ table.user_info td.text {
     border-right: solid 1px #7788bb;
 }
 
+div.error-message {
+    color: #ff0000;
+    font-weight: bold;
+    text-decoration: underline;
+    display: inline;
+}
+
+div.input input {
+}
+
+div.input label {
+    width: 100px;
+    display: block;
+    margin-top: 20px;
+}
+
+
