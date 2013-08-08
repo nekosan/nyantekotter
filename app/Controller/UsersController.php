@@ -329,7 +329,7 @@ class UsersController extends AppController {
                 return $this -> redirect('index');
             }
             else{
-                $this -> Session -> setFlash('ログイン失敗');
+                $this -> Session -> setFlash('ログインに失敗しました');
             }
         }
     }
