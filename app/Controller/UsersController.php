@@ -52,9 +52,67 @@ class UsersController extends AppController {
         }
     }
 
+    public function get_latest_tl(){
+        if($this -> RequestHandler -> isAjax()){
+            Configure::write('debug', 0);
+            $this -> autoRender = false;
+
+            $auth_user = $this -> User -> getUser($this -> Auth -> user('username'));
+
+            $follow = $this -> UserUser -> getFollowId($auth_user[0]['User']['id']);
+            array_push($follow, $this -> Auth -> user('id'));
+            $options = array(
+                'conditions' => array(
+                    'Post.user_id' => $follow,
+                    'Post.f_delete' => 0,
+                    'Post.id >' => $auth_user[0]['User']['latest_post_id'],
+                ),
+                'order' => array('Post.time DESC')
+            );
+            $tweets = $this -> Post -> find('all', $options);
+            if(!empty($tweets)){
+                $this -> User -> save(array('User' => array('id' => $auth_user[0]['User']['id'], 'latest_post_id' => $tweets[0]['Post']['id'])), false, array('latest_post_id'));
+            }
+
+            $output['auth_user'] = $auth_user;
+            $output['tweets'] = $tweets;
+
+            echo $_GET['callback'] . '(' . json_encode($output) . ')';
+        }
+    }
+
+    public function get_old_tl(){
+        if($this -> RequestHandler -> isAjax()){
+            Configure::write('debug', 0);
+            $this -> autoRender = false;
+
+            $auth_user = $this -> User -> getUser($this -> Auth -> user('username'));
+
+            $follow = $this -> UserUser -> getFollowId($auth_user[0]['User']['id']);
+            array_push($follow, $this -> Auth -> user('id'));
+            $options = array(
+                'conditions' => array(
+                    'Post.user_id' => $follow,
+                    'Post.f_delete' => 0,
+                    'Post.id <' => $auth_user[0]['User']['old_post_id'],
+                ),
+                'order' => array('Post.time DESC'),
+                'limit' => 10,
+            );
+            $tweets = $this -> Post -> find('all', $options);
+            if(!empty($tweets)){
+                $this -> User -> save(array('User' => array('id' => $auth_user[0]['User']['id'], 'old_post_id' => $tweets[count($tweets) - 1]['Post']['id'])), false, array('old_post_id'));
+            }
+
+            $output['auth_user'] = $auth_user;
+            $output['tweets'] = $tweets;
+
+            echo $_GET['callback'] . '(' . json_encode($output) . ')';
+        }
+    }
+
     //Time Line
     public function timeline(){
-        Configure::write('debug', 0);
 
         $user = $this -> User -> getUser($this -> Auth -> user('username'));
         $auth_user = $this -> User -> getUser($this -> Auth -> user('username'));
@@ -74,55 +132,34 @@ class UsersController extends AppController {
             'limit' => 10
         );
 
-        
-        if($this -> RequestHandler -> isAjax()){
-            $this -> autoRender = false;
-            $options = array(
-                'conditions' => array(
-                    'Post.user_id' => $follow,
-                    'Post.f_delete' => 0,
-                    'Post.id >' => $auth_user[0]['User']['latest_post_id'],
-                ),
-                'order' => array('Post.time DESC')
-            );
-            $tweets = $this -> Post -> find('all', $options);
-            if(!empty($tweets)){
-                $this -> User -> save(array('User' => array('id' => $auth_user[0]['User']['id'], 'latest_post_id' => $tweets[0]['Post']['id'])), false, array('latest_post_id'));
-            }
-
-            $output['user'] = $user;
-            $output['auth_user'] = $auth_user;
-            $output['follow_num'] = $follow_num;
-            $output['follower_num'] = $follower_num;
-            $output['auth_follow_id'] = $auth_follow_id;
-            $output['tweets'] = $tweets;
-
-            echo $_GET['callback'] . '(' . json_encode($output) . ')';
-        }
-        else{
-            $options = array(
-                'conditions' => array(
-                    'Post.user_id' => $follow,
-                    'Post.f_delete' => 0,
-                ),
-                'limit' => 10,
-                'order' => array('Post.time DESC')
-            );
-            $tweets = $this -> Post -> find('all', $options);
+        $options = array(
+            'conditions' => array(
+                'Post.user_id' => $follow,
+                'Post.f_delete' => 0,
+            ),
+            'limit' => 10,
+            'order' => array('Post.time DESC')
+        );
+        $tweets = $this -> Post -> find('all', $options);
+        if(!empty($tweets)){
             $this -> User -> save(array('User' => array('id' => $auth_user[0]['User']['id'], 'latest_post_id' => $tweets[0]['Post']['id'])), false, array('latest_post_id'));
-
-            if($this -> request -> is('post')){
-                if($this -> Post -> postTweet($this -> request, $this -> Auth -> user('id'))){
-                    $this -> Session -> setFlash('登録に失敗しました。');
-                }
-            }
-            $this -> set('tweets', $tweets);
-            $this -> set('user', $user);
-            $this -> set('follow_num', $follow_num);
-            $this -> set('follower_num', $follower_num);
-            $this -> set('auth_user', $auth_user);
-            $this -> set('auth_follow_id', $auth_follow_id);
         }
+
+        if(!empty($tweets)){
+            $this -> User -> save(array('User' => array('id' => $auth_user[0]['User']['id'], 'old_post_id' => $tweets[count($tweets) - 1]['Post']['id'])), false, array('old_post_id'));
+        }
+
+        if($this -> request -> is('post')){
+            if($this -> Post -> postTweet($this -> request, $this -> Auth -> user('id'))){
+                $this -> Session -> setFlash('登録に失敗しました。');
+            }
+        }
+        $this -> set('tweets', $tweets);
+        $this -> set('user', $user);
+        $this -> set('follow_num', $follow_num);
+        $this -> set('follower_num', $follower_num);
+        $this -> set('auth_user', $auth_user);
+        $this -> set('auth_follow_id', $auth_follow_id);
     }
 
     //Profile
@@ -231,6 +268,7 @@ class UsersController extends AppController {
     public function register()
     {
         if($this -> request ->is('post')){
+            $this -> request -> data['User']['password'] = AuthComponent::password($this->data['User']['password']);
             if($this -> User -> save($this -> request -> data)){
                 $this -> redirect('register_completed');
             }

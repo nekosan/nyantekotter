@@ -4,6 +4,7 @@
 
 <div class="main_content">
 
+<div class="tweet_field">
 <?php foreach($tweets as $t): ?>
     <div class="tweet">
         <div class="tweet_header">
@@ -26,12 +27,10 @@
     </div>
 
     <?php endforeach; ?>
-    <?php
-        echo $this -> Paginator -> prev('Prev', $options = array(), $disabledTitle = null, $disabledoptions = array());
-    ?>
-    <?php
-        echo $this -> Paginator -> next('Next', $options = array(), $disabledTitle = null, $disabledoptions = array());
-    ?>
+</div>
+    <div class="get_old_post">
+        過去のツイートを取得するにはここをクリック
+    </div>
 </div>
 <div class="side_content">
     <table class="user_info">
