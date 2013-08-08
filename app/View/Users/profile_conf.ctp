@@ -1,4 +1,4 @@
-<?php echo $this -> session->flash() ?>
+<?php echo $this -> Session->flash(); ?>
 
 <?php 
 print(
