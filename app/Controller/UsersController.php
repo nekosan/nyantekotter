@@ -177,7 +177,14 @@ class UsersController extends AppController {
         $follower_num = count($this -> UserUser -> getFollowerId($user[0]['User']['id']));
         $follow_id = $this -> UserUser -> getFollowId($user[0]['User']['id']);
 
-        $tweet = $this -> paginate('Post', array('Post.user_id' => $user[0]['User']['id']));
+        $this -> paginate = array(
+            'conditions' => array(
+                'Post.user_id' => $user[0]['User']['id']
+            ),
+            'order' => 'Post.time DESC',
+            'limit' => 10,
+        );
+        $tweet = $this -> paginate('Post');
         
         $this -> set('user', $user);
         $this -> set('follow_num', $follow_num);
