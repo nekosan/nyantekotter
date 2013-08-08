@@ -51,7 +51,7 @@ div#header_menu span{
 
 div.tweet {
     width: 400px;
-    margin-bottom: 3px;
+    margin-bottom: 10px;
     padding: 10px;
     background-color: #eeeeff;
     /*border: solid 1px #9999ff;*/
@@ -72,6 +72,10 @@ div.tweet_content {
 div.tweet_time {
     margin-top: 10px;
     font-size: 10px;
+}
+
+div.tweet_id {
+    display: none;
 }
 
 div.tweet_field {

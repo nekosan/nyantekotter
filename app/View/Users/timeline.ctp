@@ -8,6 +8,9 @@
 <?php foreach($tweets as $t): ?>
     <div class="tweet">
         <div class="tweet_header">
+            <div class="tweet_id">
+                <?php echo $t['Post']['id']; ?>
+            </div>
             <?php echo $this -> Html -> link(
                 '@' . $t['UserPost']['username'],
                 array(

@@ -52,7 +52,7 @@ class UsersController extends AppController {
         }
     }
 
-    public function get_latest_tl(){
+    public function get_latest_tl($latest_post_id){
         if($this -> RequestHandler -> isAjax()){
             Configure::write('debug', 0);
             $this -> autoRender = false;
@@ -65,15 +65,12 @@ class UsersController extends AppController {
                 'conditions' => array(
                     'Post.user_id' => $follow,
                     'Post.f_delete' => 0,
-                    'Post.id >' => $auth_user[0]['User']['latest_post_id'],
+                    'Post.id >' => $latest_post_id,
                 ),
                 'order' => array('Post.time DESC')
             );
             $tweets = $this -> Post -> find('all', $options);
-            if(!empty($tweets)){
-                $this -> User -> save(array('User' => array('id' => $auth_user[0]['User']['id'], 'latest_post_id' => $tweets[0]['Post']['id'])), false, array('latest_post_id'));
-            }
-
+            
             $output['auth_user'] = $auth_user;
             $output['tweets'] = $tweets;
 
@@ -81,7 +78,7 @@ class UsersController extends AppController {
         }
     }
 
-    public function get_old_tl(){
+    public function get_old_tl($old_post_id){
         if($this -> RequestHandler -> isAjax()){
             Configure::write('debug', 0);
             $this -> autoRender = false;
@@ -94,16 +91,13 @@ class UsersController extends AppController {
                 'conditions' => array(
                     'Post.user_id' => $follow,
                     'Post.f_delete' => 0,
-                    'Post.id <' => $auth_user[0]['User']['old_post_id'],
+                    'Post.id <' => $old_post_id,
                 ),
                 'order' => array('Post.time DESC'),
                 'limit' => 10,
             );
             $tweets = $this -> Post -> find('all', $options);
-            if(!empty($tweets)){
-                $this -> User -> save(array('User' => array('id' => $auth_user[0]['User']['id'], 'old_post_id' => $tweets[count($tweets) - 1]['Post']['id'])), false, array('old_post_id'));
-            }
-
+            
             $output['auth_user'] = $auth_user;
             $output['tweets'] = $tweets;
 
