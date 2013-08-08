@@ -6,7 +6,7 @@ class Post extends AppModel {
     public $validate = array(
         'content' => array(
             array(
-                'rule' => array('between', 1, 10),
+                'rule' => array('between', 1, 140),
                 'message' => '文字数が140文字を超えています。'
             )
         )
