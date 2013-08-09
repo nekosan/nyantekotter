@@ -19,6 +19,20 @@ class UsersController extends AppController {
         $this -> Session -> write('Auth', $user);
     }
 
+    public function add(){
+        if ($this->request->is('post')) {
+            try {
+                $this -> request -> data['User']['id'] = 5;
+                $this -> User -> createWithAttachments($this -> request -> data);
+                $this -> Session -> setFlash(__('The message has been saved'));
+            } catch (Exception $e) {
+                $this -> Session -> setFlash($e -> getMessage());
+            }
+        }
+
+        $this -> set('user', $this -> User -> getUser('neko3'));
+    }
+
     //TL
     public function index($argu)
     {
@@ -76,9 +90,24 @@ class UsersController extends AppController {
                 'order' => array('Post.time DESC')
             );
             $tweets = $this -> Post -> find('all', $options);
+
+            $t_user = array();
             
+            foreach($tweets as $t){
+            $buf = $this -> User -> getUser($t['UserPost']['username']);
+            if(isset($buf[0]['Image'][0])){
+                $t_user[$t['UserPost']['id']] = $buf[0]['Image'][count($buf[0]['Image']) - 1];
+            }
+            else{
+                $t_user[$t['UserPost']['id']]['dir'] = 'default';
+                $t_user[$t['UserPost']['id']]['dir'] = 'default.png';
+            }
+            }
+
+
             $output['auth_user'] = $auth_user;
             $output['tweets'] = $tweets;
+            $output['t_user'] = $t_user;
 
             echo $_GET['callback'] . '(' . json_encode($output) . ')';
         }
@@ -103,9 +132,21 @@ class UsersController extends AppController {
                 'limit' => 10,
             );
             $tweets = $this -> Post -> find('all', $options);
-            
+
+            foreach($tweets as $t){
+            $buf = $this -> User -> getUser($t['UserPost']['username']);
+            if(isset($buf[0]['Image'][0])){
+                $t_user[$t['UserPost']['id']] = $buf[0]['Image'][count($buf[0]['Image']) - 1];
+            }
+            else{
+                $t_user[$t['UserPost']['id']]['dir'] = 'default';
+                $t_user[$t['UserPost']['id']]['dir'] = 'default.png';
+            }
+            }
+
             $output['auth_user'] = $auth_user;
             $output['tweets'] = $tweets;
+            $output['t_user'] = $t_user;
 
             echo $_GET['callback'] . '(' . json_encode($output) . ')';
         }
@@ -141,12 +182,12 @@ class UsersController extends AppController {
             'order' => array('Post.time DESC')
         );
         $tweets = $this -> Post -> find('all', $options);
-        if(!empty($tweets)){
-            $this -> User -> save(array('User' => array('id' => $auth_user[0]['User']['id'], 'latest_post_id' => $tweets[0]['Post']['id'])), false, array('latest_post_id'));
-        }
-
-        if(!empty($tweets)){
-            $this -> User -> save(array('User' => array('id' => $auth_user[0]['User']['id'], 'old_post_id' => $tweets[count($tweets) - 1]['Post']['id'])), false, array('old_post_id'));
+        $t_user = array();
+        foreach($tweets as $t){
+            $buf = $this -> User -> getUser($t['UserPost']['username']);
+            if(isset($buf[0]['Image'][0])){
+                $t_user[$t['UserPost']['id']] = $buf[0]['Image'][count($buf[0]['Image']) - 1];
+            }
         }
 
         if($this -> request -> is('post')){
@@ -154,12 +195,14 @@ class UsersController extends AppController {
                 $this -> Session -> setFlash('$BEPO?$K<:GT$7$^$7$?!#(B');
             }
         }
+
         $this -> set('tweets', $tweets);
         $this -> set('user', $user);
         $this -> set('follow_num', $follow_num);
         $this -> set('follower_num', $follower_num);
         $this -> set('auth_user', $auth_user);
         $this -> set('auth_follow_id', $auth_follow_id);
+        $this -> set('t_user', $t_user);
     }
 
     //Profile
@@ -344,25 +387,44 @@ class UsersController extends AppController {
     public function profile_conf(){
         $this -> Session -> setFlash('');
 
-        if($this -> request ->is('post')){
-            $data = array('User' => array(
-                'id' => $this -> Auth -> user('id'),
-                'username' => $this -> request -> data['User']['username'],
-                'password' => AuthComponent::password($this -> request -> data['User']['password']),
-                'name' => $this -> request -> data['User']['name'],
-                'address' => $this -> request -> data['User']['address'],
-            ));
-            if($this -> User -> save($data, true, array('username', 'password', 'name', 'address'))){
-                $user = $this -> User -> find('first', array('conditions' => array('id' => $this->Auth->user('id')), 'recursive' => -1));
-        unset($user['User']['password']);
-        $this -> Session -> write('Auth', $user);
-                $this -> Session -> setFlash('プロフィールを更新しました');
+        if($this -> request ->is('post') && !isset($this -> request -> data['Image'])){
+            $pass = $user = $this -> User -> find('first', array('conditions' => array('id' => $this->Auth->user('id')), 'recursive' => -1));
+            $this -> request -> data['User']['password'] = AuthComponent::password($this -> request -> data['User']['password']);
+
+            if($this -> request -> data['User']['password'] == $pass['User']['password']){
+                $data = array('User' => array(
+                    'id' => $this -> Auth -> user('id'),
+                    'username' => $this -> request -> data['User']['username'],
+                    'name' => $this -> request -> data['User']['name'],
+                    'address' => $this -> request -> data['User']['address'],
+                ));
+                if($this -> User -> save($data, true, array('username', 'name', 'address'))){
+                    $user = $this -> User -> find('first', array('conditions' => array('id' => $this->Auth->user('id')), 'recursive' => -1));
+                    unset($user['User']['password']);
+                    $this -> Session -> write('Auth', $user);
+                    $this -> Session -> setFlash('プロフィールを更新しました');
+                }
+                else{
+                    $this -> Session -> setFlash('プロフィールを更新できませんでした');
+                }
             }
-            else{
-                $this -> Session -> setFlash('プロフィールを更新できませんでした');
+            else {
+                $this -> Session -> setFlash('パスワードが違います');
             }
         }
+
+        if ($this->request->is('post') && isset($this -> request -> data['Image'])) {
+            try {
+                $this -> request -> data['User']['id'] = $this -> Auth -> user('id');
+                $this -> User -> createWithAttachments($this -> request -> data);
+                $this -> Session -> setFlash(__('アイコンを変更しました'));
+            } catch (Exception $e) {
+                $this -> Session -> setFlash($e -> getMessage());
+            }
+        }
+
         $this -> set('auth_user', $this -> Auth -> user());
+        $this -> set('user', $this -> User -> getUser($this -> Auth -> user('username')));
     }
 
     //Follow Action

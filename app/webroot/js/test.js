@@ -19,10 +19,11 @@ function update(){
         var html = "";
         console.log(d);
         for(var i = 0; i < d.tweets.length; i++){
-            html += '<div class="tweet"><div class="tweetheader">';
+            html += '<div class="tweet"><div class="tweet_header">';
             html += '<div class="tweet_id">' + d['tweets'][i]['Post']['id'] + '</div>';
             html += '<a href="/nyantekotter/users/profile/' + d['tweets'][i]['UserPost']['username'] + '">@' + d['tweets'][i]['UserPost']['username'] + '</a> ';
             html += '<b>' + d['tweets'][i]['UserPost']['name'] + '</b></div>';
+            html += '<div class="tweet_icon"><img src="/nyantekotter/files/image/attachment/' + d['t_user'][d['tweets'][i]['UserPost']['id']]['dir'] + '/thumb_' + d['t_user'][d['tweets'][i]['UserPost']['id']]['attachment'] + '" alt="icon" /></div>';
             html += '<div class="tweet_content">' + d['tweets'][i]['Post']['content'] + '</div>';
             html += '<div class="tweet_time">' + d['tweets'][i]['Post']['time'] + '</div></div>';
         }
@@ -37,10 +38,11 @@ function get_old_post(){
         var html = "";
         console.log(d);
         for(var i = 0; i < d.tweets.length; i++){
-            html += '<div class="tweet"><div class="tweetheader">';
+            html += '<div class="tweet"><div class="tweet_header">';
             html += '<div class="tweet_id">' + d['tweets'][i]['Post']['id'] + '</div>';
             html += '<a href="/nyantekotter/users/profile/' + d['tweets'][i]['UserPost']['username'] + '">@' + d['tweets'][i]['UserPost']['username'] + '</a> ';
             html += '<b>' + d['tweets'][i]['UserPost']['name'] + '</b></div>';
+            html += '<div class="tweet_icon"><img src="/nyantekotter/files/image/attachment/' + d['t_user'][d['tweets'][i]['UserPost']['id']]['dir'] + '/thumb_' + d['t_user'][d['tweets'][i]['UserPost']['id']]['attachment'] + '" alt="icon" /></div>';
             html += '<div class="tweet_content">' + d['tweets'][i]['Post']['content'] + '</div>';
             html += '<div class="tweet_time">' + d['tweets'][i]['Post']['time'] + '</div></div>';
         }

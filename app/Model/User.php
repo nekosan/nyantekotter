@@ -2,6 +2,16 @@
 App::uses('AppModel', 'Model');
 
 class User extends AppModel {
+    public $hasMany = array(
+        'Image' => array(
+            'className' => 'Attachment',
+            'foreignKey' => 'foreign_key',
+            'conditions' => array(
+                'Image.model' => 'User',
+            ),
+        ),
+    );
+
     public $validate = array(
         'username' => array(
             array(
@@ -66,6 +76,22 @@ class User extends AppModel {
 
     public function beforeSave($option = array()){
         return true;
+    }
+
+
+    public function createWithAttachments($data) {
+        if (!empty($data['Image'][0])) {
+            if (isset($data['foreign_key'])) {
+                unset($data['foreign_key']);
+            }
+        }
+
+        $this->create();
+        if ($this -> saveAll($data) && $data['Image'][0]['attachment']['error'] == 0) {
+            return true;
+        }
+
+        throw new Exception(__("This post could not be saved. Please try again"));
     }
 }
 

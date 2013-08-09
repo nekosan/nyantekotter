@@ -6,7 +6,7 @@
 
 <div class="tweet_field">
 <?php foreach($tweets as $t): ?>
-    <div class="tweet">
+<div class="tweet">
         <div class="tweet_header">
             <div class="tweet_id">
                 <?php echo $t['Post']['id']; ?>
@@ -20,6 +20,15 @@
                 )
             ); ?>
             <b><?php print(h($t['UserPost']['name'])); ?></b>
+        </div>
+        <div class="tweet_icon">
+        <?php
+            if(isset($t_user[$t['UserPost']['id']])):
+                echo $this->Html->image('/files/image/attachment/'.$t_user[$t['UserPost']['id']]['dir'].'/thumb_'.$t_user[$t['UserPost']['id']]['attachment'], array('alt' => 'icon'));
+            else:
+                echo $this->Html->image('/files/image/attachment/default/thumb_default.png', array('alt' => 'icon'));
+            endif;
+        ?>
         </div>
         <div class="tweet_content">
             <?php print(h($t['Post']['content'])) ?>
