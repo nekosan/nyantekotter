@@ -339,14 +339,12 @@ class UsersController extends AppController {
             $search_key = $this -> request['data']['User']['key'];
         }
         
-        if($search_key != ''){
-            $this -> paginate = array(
-                'conditions' => array('User.username LIKE' => '%'.$search_key.'%'),
-                'limit' => 10
-            );
-            $result = $this -> paginate('User');
-            $this -> set('result', $result);
-        }
+        $this -> paginate = array(
+            'conditions' => array('User.username LIKE' => '%'.$search_key.'%'),
+            'limit' => 10
+        );
+        $result = $this -> paginate('User');
+        $this -> set('result', $result);
 
         $later_tweet = array();
         foreach ($auth_follow_id as $id){
