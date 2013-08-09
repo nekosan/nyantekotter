@@ -8,6 +8,7 @@
 /build
 /dist
 /tags
+/app/webroot/files/image
 *.swp
 
 # OS generated files #
