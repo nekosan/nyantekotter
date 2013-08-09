@@ -100,7 +100,7 @@ class UsersController extends AppController {
             }
             else{
                 $t_user[$t['UserPost']['id']]['dir'] = 'default';
-                $t_user[$t['UserPost']['id']]['dir'] = 'default.png';
+                $t_user[$t['UserPost']['id']]['attachment'] = 'default.png';
             }
             }
 
@@ -140,7 +140,7 @@ class UsersController extends AppController {
             }
             else{
                 $t_user[$t['UserPost']['id']]['dir'] = 'default';
-                $t_user[$t['UserPost']['id']]['dir'] = 'default.png';
+                $t_user[$t['UserPost']['id']]['attachment'] = 'default.png';
             }
             }
 
